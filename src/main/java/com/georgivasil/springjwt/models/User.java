@@ -25,6 +25,14 @@ public class User {
 	private String username;
 
 	@NotBlank
+	@Size(max = 30)
+	private String firstName;
+
+	@NotBlank
+	@Size(max = 30)
+	private String lastName;
+
+	@NotBlank
 	@Size(max = 50)
 	@Email
 	private String email;
@@ -123,5 +131,21 @@ public class User {
 
 	public void setProfilePic(String profilePic) {
 		this.profilePic = profilePic;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 }

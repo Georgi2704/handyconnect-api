@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/file")
-public class PictureController {
+public class ProfilePictureController {
 
     @Autowired
     FilesStorageService storageService;
@@ -72,7 +72,7 @@ public class PictureController {
         List<FileInfo> fileInfos = storageService.loadAll("picture").map(path -> {
             String filename = path.getFileName().toString();
             String url = MvcUriComponentsBuilder
-                    .fromMethodName(PictureController.class, "getFile", path.getFileName().toString()).build().toString();
+                    .fromMethodName(ProfilePictureController.class, "getFile", path.getFileName().toString()).build().toString();
 
             return new FileInfo(filename, url);
         }).collect(Collectors.toList());

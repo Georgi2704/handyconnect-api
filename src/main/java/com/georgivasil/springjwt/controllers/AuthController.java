@@ -76,8 +76,6 @@ public class AuthController {
 		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles, userDetails.getProfilepic()));
 	}
 
-
-
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
 		AlreadyExistsError AlreadyExistsError = new AlreadyExistsError();
