@@ -17,7 +17,6 @@ public class Media {
     @NotBlank
     private String filename;
 
-    @NotBlank
     private Boolean isVideo;
 
     public Media(){

@@ -74,14 +74,14 @@ public class ProblemController {
                         .body(new MessageResponse("Category not found: " + c.getName()));
             }
             else{
-                categories.add(c);
+                categories.add(categoryOptional.get());
             }
         }
         for (Category c:categories) {
             System.out.println("Category:" + c.toString());
         }
-        categories.get(0).setId(1L);
-        categories.get(1).setId(2L);
+//        categories.get(0).setId(1L);
+//        categories.get(1).setId(2L);
 
 
         String message = "";
@@ -95,7 +95,6 @@ public class ProblemController {
             }
             storageService.save(file, newFileName, "picture");
             Media picture = new Media(newFileName, false);
-            picture.setId(3L);
             System.out.println("Picture :" + picture);
             List<Media> medias = new ArrayList<>();
             medias.add(picture);

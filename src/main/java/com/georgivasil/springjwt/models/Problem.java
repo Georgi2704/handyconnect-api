@@ -37,13 +37,13 @@ public class Problem {
         @Size(max = 100)
         private String location;
 
-        @ManyToMany(fetch = FetchType.LAZY)
+        @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
         @JoinTable(	name = "problems_categories",
                 joinColumns = @JoinColumn(name = "problem_id"),
                 inverseJoinColumns = @JoinColumn(name = "category_id"))
         private List<Category> categories = new ArrayList<>();
 
-        @OneToMany(fetch = FetchType.LAZY)
+        @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
         @JoinTable(	name = "problems_medias",
                 joinColumns = @JoinColumn(name = "problem_id"),
                 inverseJoinColumns = @JoinColumn(name = "media_id"))
