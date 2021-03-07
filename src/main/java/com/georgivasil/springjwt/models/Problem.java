@@ -23,7 +23,6 @@ public class Problem {
         private Long id;
 
         @ManyToOne
-        @NotBlank
         @Valid
         private User customer;
 
@@ -42,18 +41,16 @@ public class Problem {
         @JoinTable(	name = "problems_categories",
                 joinColumns = @JoinColumn(name = "problem_id"),
                 inverseJoinColumns = @JoinColumn(name = "category_id"))
-        private Set<Category> categories = new HashSet<>();
+        private List<Category> categories = new ArrayList<>();
 
-        @ManyToMany(fetch = FetchType.LAZY)
+        @OneToMany(fetch = FetchType.LAZY)
         @JoinTable(	name = "problems_medias",
                 joinColumns = @JoinColumn(name = "problem_id"),
                 inverseJoinColumns = @JoinColumn(name = "media_id"))
         private List<Media> media = new ArrayList<>();
 
-        @NotBlank
         private EStatus status;
 
-        @NotBlank
         private String posted_at;
 
         private String fixed_at;
@@ -61,7 +58,7 @@ public class Problem {
         public Problem() {
         }
 
-        public Problem(User customer, String title, String description, String location, Set<Category> categories, List<Media> media) {
+        public Problem(User customer, String title, String description, String location, List<Category> categories, List<Media> media) {
             this.customer = customer;
             this.title = title;
             this.description = description;
@@ -72,4 +69,99 @@ public class Problem {
             this.posted_at = LocalDateTime.now().toString();
         }
 
+    public Long getId() {
+        return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(User customer) {
+        this.customer = customer;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public List<Media> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<Media> media) {
+        this.media = media;
+    }
+
+    public EStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EStatus status) {
+        this.status = status;
+    }
+
+    public String getPosted_at() {
+        return posted_at;
+    }
+
+    public void setPosted_at(String posted_at) {
+        this.posted_at = posted_at;
+    }
+
+    public String getFixed_at() {
+        return fixed_at;
+    }
+
+    public void setFixed_at(String fixed_at) {
+        this.fixed_at = fixed_at;
+    }
+
+    @Override
+    public String toString() {
+        return "Problem{" +
+                "id=" + id +
+                ", customer=" + customer +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", location='" + location + '\'' +
+                ", categories=" + categories +
+                ", media=" + media +
+                ", status=" + status +
+                ", posted_at='" + posted_at + '\'' +
+                ", fixed_at='" + fixed_at + '\'' +
+                '}';
+    }
+}

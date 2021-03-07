@@ -1,4 +1,4 @@
-package com.georgivasil.springjwt.controllers;
-
-public class OfferController {
-}
+//package com.georgivasil.springjwt.controllers;
+//
+//public class OfferController {
+//}

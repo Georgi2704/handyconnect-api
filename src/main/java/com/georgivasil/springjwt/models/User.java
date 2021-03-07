@@ -55,11 +55,13 @@ public class User {
 	public User() {
 	}
 
-	public User(String username, String email, String password) {
+	public User(String username, String email, String password, String firstName, String lastName) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.registered_at = LocalDateTime.now().toString();
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
 	public User(String username, String email, String password, String localDate) {
@@ -147,5 +149,20 @@ public class User {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", username='" + username + '\'' +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", email='" + email + '\'' +
+				", profilePic='" + profilePic + '\'' +
+				", password='" + password + '\'' +
+				", registered_at='" + registered_at + '\'' +
+				", roles=" + roles +
+				'}';
 	}
 }
