@@ -79,9 +79,6 @@ public class ProblemController {
         for (Category c:categories) {
             System.out.println("Category:" + c.toString());
         }
-//        categories.get(0).setId(1L);
-//        categories.get(1).setId(2L);
-
 
         String message = "";
 //        try {
