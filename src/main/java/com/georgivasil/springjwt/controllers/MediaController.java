@@ -23,6 +23,7 @@ public class MediaController {
     @ResponseBody
     public ResponseEntity<Resource> getPicture(@PathVariable String filename) {
         Resource file = storageService.load(filename, "picture");
+        System.out.println("opa");
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
