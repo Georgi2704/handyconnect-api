@@ -37,7 +37,7 @@ public class Problem {
         @Size(max = 100)
         private String location;
 
-        @OneToMany(fetch = FetchType.LAZY)
+        @ManyToMany
         @JoinTable(	name = "problems_categories",
                 joinColumns = @JoinColumn(name = "problem_id"),
                 inverseJoinColumns = @JoinColumn(name = "category_id"))
