@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "categories")
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank
@@ -40,7 +40,7 @@ public class Category {
     public String toString() {
         return "Category{" +
                 "id=" + id +
-                ", name='" + title + '\'' +
+                ", title='" + title + '\'' +
                 '}';
     }
 }

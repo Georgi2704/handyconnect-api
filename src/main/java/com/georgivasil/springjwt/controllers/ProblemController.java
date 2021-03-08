@@ -75,6 +75,7 @@ public class ProblemController {
                 categories.add(categoryOptional.get());
             }
         }
+
         for (Category c:categories) {
             System.out.println("Category:" + c.toString());
         }
@@ -92,6 +93,7 @@ public class ProblemController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Your picture file is too large."));
             }
             storageService.save(file, newFileName, "picture");
+
             Media picture = new Media(newFileName, false);
             System.out.println("Picture :" + picture);
             List<Media> medias = new ArrayList<>();
@@ -100,15 +102,6 @@ public class ProblemController {
                 System.out.println("Media" + m.toString());
             }
 
-
-//            Problem newVideo = new Problem()
-//                    (
-//                            uploader.get(),
-//                            problem.getTitle(),
-//                            problem.getDescription(),
-//                            newFileName,
-//                            categoryOptional.get()
-//                    );
                 Problem newProblem = new Problem(
                         customer.get(),
                         problem.getTitle(),

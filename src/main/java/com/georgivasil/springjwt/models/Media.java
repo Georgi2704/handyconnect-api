@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 public class Media {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank
