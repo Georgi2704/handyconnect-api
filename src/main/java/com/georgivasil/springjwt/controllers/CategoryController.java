@@ -26,7 +26,7 @@ public class CategoryController {
     @PostMapping("/create")
     public String createCategory(@RequestBody Category category){
         categoryRepo.save(category);
-        return "Category created successfully: " + category.getName();
+        return "Category created successfully: " + category.getTitle();
     }
 
     @CrossOrigin
@@ -39,7 +39,7 @@ public class CategoryController {
             throw new NotFoundException("id-" + id);
         } else {
             Category newCategory = categoryOptional.get();
-            newCategory.setName(category.getName());
+            newCategory.setTitle(category.getTitle());
             categoryRepo.save(newCategory);
             return newCategory;
         }

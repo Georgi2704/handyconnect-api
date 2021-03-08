@@ -12,12 +12,12 @@ public class Category {
     private Long id;
 
     @NotBlank
-    private String name;
+    private String title;
 
     public Category(){}
 
-    public Category(String name){
-        this.name = name;
+    public Category(String title){
+        this.title = title;
     }
 
     public Long getId() {
@@ -28,19 +28,19 @@ public class Category {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     @Override
     public String toString() {
         return "Category{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + title + '\'' +
                 '}';
     }
 }

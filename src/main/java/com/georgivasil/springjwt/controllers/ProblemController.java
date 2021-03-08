@@ -1,6 +1,5 @@
 package com.georgivasil.springjwt.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.georgivasil.springjwt.exceptions.NotFoundException;
 import com.georgivasil.springjwt.models.Category;
@@ -17,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,10 +66,10 @@ public class ProblemController {
 
         List<Category> categories = new ArrayList<>();
         for (Category c : problem.getCategories()) {
-            Optional<Category> categoryOptional = categoryRepo.findByName(c.getName());
+            Optional<Category> categoryOptional = categoryRepo.findByTitle(c.getTitle());
             if (!categoryOptional.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new MessageResponse("Category not found: " + c.getName()));
+                        .body(new MessageResponse("Category not found: " + c.getTitle()));
             }
             else{
                 categories.add(categoryOptional.get());
