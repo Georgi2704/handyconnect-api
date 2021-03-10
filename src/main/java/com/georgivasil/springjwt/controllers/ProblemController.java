@@ -2,10 +2,7 @@ package com.georgivasil.springjwt.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.georgivasil.springjwt.exceptions.NotFoundException;
-import com.georgivasil.springjwt.models.Category;
-import com.georgivasil.springjwt.models.Media;
-import com.georgivasil.springjwt.models.Problem;
-import com.georgivasil.springjwt.models.User;
+import com.georgivasil.springjwt.models.*;
 import com.georgivasil.springjwt.payload.response.MessageResponse;
 import com.georgivasil.springjwt.repository.*;
 import com.georgivasil.springjwt.security.services.UserDetailsImpl;
@@ -138,5 +135,18 @@ public class ProblemController {
         else {
             throw new NotFoundException("problem not found" + id);
         }
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/from/{id}")
+    public List<Problem> get10Problems_Unfixed(@PathVariable Long id){
+        List<Problem> problems = new ArrayList<>();
+        if (id == 0) {
+            problems = problemRepo.findTop10ByStatusOrderByIdDesc(EStatus.STATUS_UNDEFINED);
+        }
+        else {
+            problems = problemRepo.findAllByIdBetweenAndStatusOrderByIdDesc(id-20, id-1, EStatus.STATUS_UNDEFINED);
+        }
+        return problems;
     }
 }
