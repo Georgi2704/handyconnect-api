@@ -1,5 +1,6 @@
 package com.georgivasil.springjwt.controllers;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -56,9 +58,24 @@ public class AuthController {
 
 	@RequestMapping(value = "/getuserdetails", method = RequestMethod.GET)
 	@ResponseBody
-	public Long currentUserDetails(Authentication authentication) {
+	public User currentUserDetails(Authentication authentication) {
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		return userDetails.getId();
+		Set<Role> roles = new HashSet<>();
+		Set<String> rolesstring = new HashSet<>();
+		for (GrantedAuthority a: userDetails.getAuthorities()) {
+			rolesstring.add(a.getAuthority());
+			System.out.println(a.getAuthority());
+		}
+		roles = getRoles(rolesstring);
+		User user = new User(userDetails.getUsername(), userDetails.getEmail(), "", userDetails.getFirstName(), userDetails.getLastName());
+		user.setRoles(roles);
+		for (Role r: roles) {
+			System.out.println(r.getName());
+		}
+		user.setProfilePic(userDetails.getProfilepic());
+		user.setRegistered_at(userDetails.getRegistered_at());
+
+		return user;
 	}
 
 
@@ -74,6 +91,36 @@ public class AuthController {
 		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
 
 		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles, userDetails.getProfilepic()));
+	}
+
+	private Set<Role> getRoles (Set<String> strRoles){
+		Set<Role> roles = new HashSet<>();
+
+		if (strRoles == null) {
+			Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
+					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+			roles.add(userRole);
+		}
+		else {
+			strRoles.forEach(role -> {
+					if(role.equals("admin") || role.equals("ROLE_ADMIN")) {
+						Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(adminRole);
+					}
+					else if(role.equals("handyman") || role.equals("ROLE_HANDYMAN")) {
+						Role handymanRole = roleRepository.findByName(ERole.ROLE_HANDYMAN)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(handymanRole);
+					}
+					else {
+						Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(userRole);
+					}
+			});
+		}
+		return roles;
 	}
 
 	@PostMapping("/signup")
@@ -100,41 +147,10 @@ public class AuthController {
 				signUpRequest.getFirstName(),
 				signUpRequest.getLastName());
 
-		Set<String> strRoles = new HashSet<String>();
+		Set<String> strRoles = new HashSet<>();
 		strRoles = signUpRequest.getRole();
-		for (String role: strRoles) {
-			System.out.println(role);
-		}
-		Set<Role> roles = new HashSet<>();
 
-
-		if (strRoles == null) {
-			Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-			roles.add(userRole);
-		}
-		else {
-			strRoles.forEach(role -> {
-				switch (role) {
-					case "admin":
-						Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-						roles.add(adminRole);
-						break;
-					case "mod":
-						Role handymanRole = roleRepository.findByName(ERole.ROLE_HANDYMAN)
-								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-						roles.add(handymanRole);
-						break;
-					default:
-						Role customerRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
-								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-						roles.add(customerRole);
-				}
-			});
-		}
-
-		user.setRoles(roles);
+		user.setRoles(getRoles(strRoles));
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

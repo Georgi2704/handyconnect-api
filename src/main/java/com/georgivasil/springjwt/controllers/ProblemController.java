@@ -147,17 +147,10 @@ public class ProblemController {
     @CrossOrigin
     @PreAuthorize("hasRole('CUSTOMER') or hasRole('HANDYMAN') or hasRole('ADMIN')")
     @GetMapping(value = "/customer")
-    public List<Problem> getActiveProblemsByCustomer(Authentication authentication, @RequestParam("done") Boolean done){
+    public List<Problem> getActiveProblemsByCustomer(Authentication authentication){
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         long userID = userDetails.getId();
         Optional<User> customer = userRepo.findById(userID);
-        List<Problem> problemList;
-        if (!done) {
-           problemList = problemRepo.findAllByCustomerAndStatus(customer.get(), EStatus.STATUS_UNDEFINED);
-        }
-        else{
-            problemList = problemRepo.findAllByCustomerAndStatus(customer.get(), EStatus.STATUS_DONE);
-        }
-        return problemList;
+        return problemRepo.findAllByCustomer(customer.get());
     }
 }

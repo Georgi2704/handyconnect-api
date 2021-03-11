@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
     Optional<Problem> findByTitle(String title);
 
-    List<Problem> findAllByCustomerAndStatus(User customer, EStatus status);
+    List<Problem> findAllByCustomer(User customer);
 
     List <Problem> findTop10ByStatusOrderByIdDesc(EStatus status);
 

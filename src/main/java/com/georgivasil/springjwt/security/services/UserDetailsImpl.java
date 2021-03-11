@@ -23,19 +23,29 @@ public class UserDetailsImpl implements UserDetails {
 
 	private String profilePic;
 
+	private String firstName;
+
+	private String lastName;
+
+	private String registered_at;
+
 	@JsonIgnore
 	private String password;
 
 	private Collection<? extends GrantedAuthority> authorities;
 
 	public UserDetailsImpl(Long id, String username, String email, String password,
-						   Collection<? extends GrantedAuthority> authorities, String profilePic) {
+						   Collection<? extends GrantedAuthority> authorities, String profilePic,
+						   String firstName, String lastName, String registered_at) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.authorities = authorities;
 		this.profilePic = profilePic;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.registered_at = registered_at;
 	}
 
 	public static UserDetailsImpl build(User user) {
@@ -48,7 +58,11 @@ public class UserDetailsImpl implements UserDetails {
 				user.getUsername(),
 				user.getEmail(),
 				user.getPassword(),
-				authorities, user.getProfilePic());
+				authorities,
+				user.getProfilePic(),
+				user.getFirstName(),
+				user.getLastName(),
+				user.getRegistered_at());
 	}
 
 	@Override
@@ -74,6 +88,18 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public String getUsername() {
 		return username;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public String getRegistered_at() {
+		return registered_at;
 	}
 
 	@Override
