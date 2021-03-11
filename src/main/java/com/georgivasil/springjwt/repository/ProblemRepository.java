@@ -2,6 +2,7 @@ package com.georgivasil.springjwt.repository;
 
 import com.georgivasil.springjwt.models.EStatus;
 import com.georgivasil.springjwt.models.Problem;
+import com.georgivasil.springjwt.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
     Optional<Problem> findByTitle(String title);
+
+    List<Problem> findAllByCustomerAndStatus(User customer, EStatus status);
 
     List <Problem> findTop10ByStatusOrderByIdDesc(EStatus status);
 

@@ -109,13 +109,6 @@ public class ProblemController {
             problemRepo.save(newProblem);
             message = newFileName;
             return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
-//        }
-//        catch (Exception e) {
-//            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-//            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new MessageResponse(message));
-//        }
-
-        //Video fullVideo = new Video("g", "g", "g", "test", )
     }
 
     @CrossOrigin
@@ -148,5 +141,23 @@ public class ProblemController {
             problems = problemRepo.findAllByIdBetweenAndStatusOrderByIdDesc(id-20, id-1, EStatus.STATUS_UNDEFINED);
         }
         return problems;
+    }
+
+
+    @CrossOrigin
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('HANDYMAN') or hasRole('ADMIN')")
+    @GetMapping(value = "/customer")
+    public List<Problem> getActiveProblemsByCustomer(Authentication authentication, @RequestParam("done") Boolean done){
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        long userID = userDetails.getId();
+        Optional<User> customer = userRepo.findById(userID);
+        List<Problem> problemList;
+        if (!done) {
+           problemList = problemRepo.findAllByCustomerAndStatus(customer.get(), EStatus.STATUS_UNDEFINED);
+        }
+        else{
+            problemList = problemRepo.findAllByCustomerAndStatus(customer.get(), EStatus.STATUS_DONE);
+        }
+        return problemList;
     }
 }
