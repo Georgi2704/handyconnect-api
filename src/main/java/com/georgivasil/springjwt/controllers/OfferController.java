@@ -40,7 +40,7 @@ public class OfferController {
     PasswordEncoder encoder;
 
     @CrossOrigin
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('HANDYMAN') or hasRole('ADMIN')")
     @PostMapping("/make/{id}")
     public ResponseEntity<MessageResponse> makeOffer(Authentication authentication, @RequestBody Offer offer, @PathVariable long id){
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -61,4 +61,6 @@ public class OfferController {
         offerRepo.save(newOffer);
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Offer made successfully !"));
     }
+
+
 }

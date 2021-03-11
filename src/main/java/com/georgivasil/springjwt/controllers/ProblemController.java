@@ -52,7 +52,7 @@ public class ProblemController {
     FilesStorageService storageService;
 
     @CrossOrigin
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('HANDYMAN') or hasRole('ADMIN')")
     @PostMapping("/post")
     public ResponseEntity<MessageResponse> postProblem(Authentication authentication, @RequestParam("problem") String videoString, @RequestParam("file") MultipartFile file) throws IOException {
         Problem problem  = new ObjectMapper().readValue(videoString, Problem.class);

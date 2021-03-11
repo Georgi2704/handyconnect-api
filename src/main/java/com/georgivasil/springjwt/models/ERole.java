@@ -1,7 +1,7 @@
 package com.georgivasil.springjwt.models;
 
 public enum ERole {
-	ROLE_USER,
-    ROLE_MODERATOR,
+	ROLE_CUSTOMER,
+    ROLE_HANDYMAN,
     ROLE_ADMIN
 }
