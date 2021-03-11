@@ -64,14 +64,10 @@ public class AuthController {
 		Set<String> rolesstring = new HashSet<>();
 		for (GrantedAuthority a: userDetails.getAuthorities()) {
 			rolesstring.add(a.getAuthority());
-			System.out.println(a.getAuthority());
 		}
 		roles = getRoles(rolesstring);
 		User user = new User(userDetails.getUsername(), userDetails.getEmail(), "", userDetails.getFirstName(), userDetails.getLastName());
 		user.setRoles(roles);
-		for (Role r: roles) {
-			System.out.println(r.getName());
-		}
 		user.setProfilePic(userDetails.getProfilepic());
 		user.setRegistered_at(userDetails.getRegistered_at());
 

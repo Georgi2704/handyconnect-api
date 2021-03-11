@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -40,7 +41,7 @@ public class OfferController {
     PasswordEncoder encoder;
 
     @CrossOrigin
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('HANDYMAN') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('HANDYMAN') or hasRole('ADMIN')")
     @PostMapping("/make/{id}")
     public ResponseEntity<MessageResponse> makeOffer(Authentication authentication, @RequestBody Offer offer, @PathVariable long id){
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -60,6 +61,16 @@ public class OfferController {
 
         offerRepo.save(newOffer);
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Offer made successfully !"));
+    }
+
+    @CrossOrigin
+    @PreAuthorize("hasRole('HANDYMAN') or hasRole('ADMIN')")
+    @GetMapping(value = "/handyman")
+    public List<Offer> getActiveProblemsByCustomer(Authentication authentication){
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        long userID = userDetails.getId();
+        Optional<User> handyman = userRepo.findById(userID);
+        return offerRepo.findAllByHandyman(handyman.get());
     }
 
 
