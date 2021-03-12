@@ -22,13 +22,15 @@ public class Offer {
 
     private Double presumedCost;
 
-    private Long estimatedTime;
+    private String estimatedTime;
+
+    private String additionalInfo;
 
     private EStatus status;
 
     public Offer(){}
 
-    public Offer(Double presumedCost, Long estimatedTime){
+    public Offer(Double presumedCost, String estimatedTime){
         this.presumedCost = presumedCost;
         this.estimatedTime = estimatedTime;
         this.status = EStatus.STATUS_UNDEFINED;
@@ -66,11 +68,11 @@ public class Offer {
         this.presumedCost = presumedCost;
     }
 
-    public Long getEstimatedTime() {
+    public String getEstimatedTime() {
         return estimatedTime;
     }
 
-    public void setEstimatedTime(Long estimatedTime) {
+    public void setEstimatedTime(String estimatedTime) {
         this.estimatedTime = estimatedTime;
     }
 
@@ -80,6 +82,14 @@ public class Offer {
 
     public void setStatus(EStatus status) {
         this.status = status;
+    }
+
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 
     @Override

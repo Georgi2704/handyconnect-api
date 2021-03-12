@@ -48,7 +48,7 @@ public class OfferController {
         long userID = userDetails.getId();
         Optional<User> handyman = userRepo.findById(userID);
         if (!handyman.isPresent()){
-            throw new NotFoundException("Handyman not found - id:" + id);
+            throw new NotFoundException("Handyman not found - id:" + userID);
         }
 
         Optional<Problem> problem = problemRepo.findById(id);
