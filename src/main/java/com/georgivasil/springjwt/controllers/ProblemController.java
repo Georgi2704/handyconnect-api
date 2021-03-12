@@ -54,7 +54,7 @@ public class ProblemController {
     @CrossOrigin
     @PreAuthorize("hasRole('CUSTOMER') or hasRole('HANDYMAN') or hasRole('ADMIN')")
     @PostMapping("/post")
-    public ResponseEntity<MessageResponse> postProblem(Authentication authentication, @RequestParam("problem") String videoString, @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<?> postProblem(Authentication authentication, @RequestParam("problem") String videoString, @RequestParam("file") MultipartFile file) throws IOException {
         Problem problem  = new ObjectMapper().readValue(videoString, Problem.class);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         long userID = userDetails.getId();
@@ -108,7 +108,7 @@ public class ProblemController {
             System.out.println("Problem:" + newProblem.toString());
             problemRepo.save(newProblem);
             message = newFileName;
-            return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
+            return ResponseEntity.status(HttpStatus.OK).body(newProblem);
     }
 
     @CrossOrigin
