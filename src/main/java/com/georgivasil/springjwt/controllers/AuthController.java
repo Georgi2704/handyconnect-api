@@ -67,6 +67,7 @@ public class AuthController {
 		}
 		roles = getRoles(rolesstring);
 		User user = new User(userDetails.getUsername(), userDetails.getEmail(), "", userDetails.getFirstName(), userDetails.getLastName());
+		user.setId(userDetails.getId());
 		user.setRoles(roles);
 		user.setProfilePic(userDetails.getProfilepic());
 		user.setRegistered_at(userDetails.getRegistered_at());
