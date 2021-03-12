@@ -147,7 +147,7 @@ public class ProblemController {
     @CrossOrigin
     @PreAuthorize("hasRole('CUSTOMER') or hasRole('HANDYMAN') or hasRole('ADMIN')")
     @GetMapping(value = "/customer")
-    public List<Problem> getActiveProblemsByCustomer(Authentication authentication){
+    public List<Problem> getProblemsByCustomer(Authentication authentication){
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         long userID = userDetails.getId();
         Optional<User> customer = userRepo.findById(userID);

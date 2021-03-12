@@ -1,10 +1,7 @@
 package com.georgivasil.springjwt.controllers;
 
 import com.georgivasil.springjwt.exceptions.NotFoundException;
-import com.georgivasil.springjwt.models.Category;
-import com.georgivasil.springjwt.models.Offer;
-import com.georgivasil.springjwt.models.Problem;
-import com.georgivasil.springjwt.models.User;
+import com.georgivasil.springjwt.models.*;
 import com.georgivasil.springjwt.payload.response.MessageResponse;
 import com.georgivasil.springjwt.repository.*;
 import com.georgivasil.springjwt.security.services.UserDetailsImpl;
@@ -42,8 +39,8 @@ public class OfferController {
 
     @CrossOrigin
     @PreAuthorize("hasRole('HANDYMAN') or hasRole('ADMIN')")
-    @PostMapping("/make/{id}")
-    public ResponseEntity<MessageResponse> makeOffer(Authentication authentication, @RequestBody Offer offer, @PathVariable long id){
+    @PostMapping("/make/{problemid}")
+    public ResponseEntity<MessageResponse> makeOffer(Authentication authentication, @RequestBody Offer offer, @PathVariable long problemid){
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         long userID = userDetails.getId();
         Optional<User> handyman = userRepo.findById(userID);
@@ -51,9 +48,9 @@ public class OfferController {
             throw new NotFoundException("Handyman not found - id:" + userID);
         }
 
-        Optional<Problem> problem = problemRepo.findById(id);
+        Optional<Problem> problem = problemRepo.findById(problemid);
         if (!problem.isPresent()){
-            throw new NotFoundException("Problem not found - id:" + id);
+            throw new NotFoundException("Problem not found - id:" + problemid);
         }
         Offer newOffer = new Offer(offer.getPresumedCost(), offer.getEstimatedTime());
         newOffer.setHandyman(handyman.get());
@@ -66,12 +63,61 @@ public class OfferController {
     @CrossOrigin
     @PreAuthorize("hasRole('HANDYMAN') or hasRole('ADMIN')")
     @GetMapping(value = "/handyman")
-    public List<Offer> getActiveProblemsByCustomer(Authentication authentication){
+    public List<Offer> getOffersByHandyman(Authentication authentication){
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         long userID = userDetails.getId();
         Optional<User> handyman = userRepo.findById(userID);
         return offerRepo.findAllByHandyman(handyman.get());
     }
+
+    @CrossOrigin
+    @PreAuthorize("hasRole('HANDYMAN') or hasRole('ADMIN')")
+    @GetMapping(value = "/problem/{problemid}")
+    public List<Offer> getOffersByProblem(@PathVariable long problemid){
+        Optional<Problem> problemOpt = problemRepo.findById(problemid);
+        if (!problemOpt.isPresent()){
+            throw new NotFoundException("Problem not found - id:" + problemid);
+        }
+        return offerRepo.findAllByProblem(problemOpt.get());
+    }
+    @CrossOrigin
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<MessageResponse> changeStatus(@PathVariable long id, @RequestParam("accept") Boolean accept){
+        Optional<Offer> offerOpt = offerRepo.findById(id);
+        if (!offerOpt.isPresent()){
+            throw new NotFoundException("Offer not found - id:" + id);
+        }
+        Offer offer = offerOpt.get();
+
+        if (accept){
+            Optional<Problem> problemOpt = problemRepo.findById(offer.getProblem().getId());
+            if (!problemOpt.isPresent()){
+                throw new NotFoundException("Problem not found - id:" + id);
+            }
+            List<Offer> offerList = offerRepo.findAllByProblem(problemOpt.get());
+
+            for (Offer o : offerList) {
+                if (!o.getId().equals(offer.getId())){
+                    o.setStatus(EStatus.STATUS_REFUSED);
+                }
+                else {
+                    o.setStatus(EStatus.STATUS_ACCEPTED);
+                }
+                offerRepo.save(o);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Offer accepted successfully !"));
+        }
+        else if (!accept){
+            offer.setStatus(EStatus.STATUS_REFUSED);
+            offerRepo.save(offer);
+            return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Offer refused successfully !"));
+
+        }
+        return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(new MessageResponse("ddz"));
+    }
+
+
 
 
 }
