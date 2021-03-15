@@ -30,9 +30,10 @@ public class Offer {
 
     public Offer(){}
 
-    public Offer(Double presumedCost, String estimatedTime){
+    public Offer(Double presumedCost, String estimatedTime, String additionalInfo){
         this.presumedCost = presumedCost;
         this.estimatedTime = estimatedTime;
+        this.additionalInfo = additionalInfo;
         this.status = EStatus.STATUS_UNDEFINED;
     }
 

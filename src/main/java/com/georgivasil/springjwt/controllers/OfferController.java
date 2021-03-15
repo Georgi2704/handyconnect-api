@@ -52,7 +52,7 @@ public class OfferController {
         if (!problem.isPresent()){
             throw new NotFoundException("Problem not found - id:" + problemid);
         }
-        Offer newOffer = new Offer(offer.getPresumedCost(), offer.getEstimatedTime());
+        Offer newOffer = new Offer(offer.getPresumedCost(), offer.getEstimatedTime(), offer.getAdditionalInfo());
         newOffer.setHandyman(handyman.get());
         newOffer.setProblem(problem.get());
 
