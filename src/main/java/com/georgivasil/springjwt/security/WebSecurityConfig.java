@@ -70,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/file/**").permitAll()
 				.antMatchers("/category/**").permitAll()
 				.antMatchers("/media/**").permitAll()
-				.antMatchers("/api/**").permitAll()
+				.antMatchers("/users/**").permitAll()
 				.antMatchers("/gs-guide-websocket/**").permitAll()
 				.anyRequest().authenticated();
 
