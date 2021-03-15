@@ -80,6 +80,18 @@ public class OfferController {
         }
         return offerRepo.findAllByProblem(problemOpt.get());
     }
+//
+//    @CrossOrigin
+//    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
+//    @GetMapping(value = "/delete/{offerid}")
+//    public List<Offer> deleteOffer(@PathVariable long offerId){
+//        Optional<Problem> problemOpt = problemRepo.findById(problemid);
+//        if (!problemOpt.isPresent()){
+//            throw new NotFoundException("Problem not found - id:" + problemid);
+//        }
+//        return offerRepo.findAllByProblem(problemOpt.get());
+//    }
+
     @CrossOrigin
     @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @PutMapping(value = "/{id}")

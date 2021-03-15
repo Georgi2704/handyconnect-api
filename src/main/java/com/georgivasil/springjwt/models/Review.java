@@ -42,12 +42,11 @@ public class Review {
     public Review() {
     }
 
-    public Review(User handyman, Problem problem, String description, Boolean isFixedSuccessfully, Double rating) {
-        this.handyman = handyman;
-        this.problem = problem;
+    public Review(String description, Boolean isFixedSuccessfully, Double rating) {
         this.description = description;
         this.isFixedSuccessfully = isFixedSuccessfully;
         this.rating = rating;
+        this.posted_at = LocalDateTime.now().toString();
     }
 
     public Long getId() {
