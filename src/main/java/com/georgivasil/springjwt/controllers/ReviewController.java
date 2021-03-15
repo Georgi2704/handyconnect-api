@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -35,7 +37,7 @@ public class ReviewController {
     @CrossOrigin
     @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @PostMapping("/post/{handymanid}/{problemid}")
-    public Review postReview(@PathVariable Long problemid, @PathVariable Long handymanid, @RequestBody Review review){
+    public ResponseEntity<?> postReview(@PathVariable Long problemid, @PathVariable Long handymanid, @RequestBody Review review){
         Optional<Problem> problem = problemRepo.findById(problemid);
         if (!problem.isPresent()){
             throw new NotFoundException("Problem not found - id:" + problemid);
@@ -50,7 +52,19 @@ public class ReviewController {
         review1.setProblem(problem.get());
         reviewRepo.save(review1);
 
-//        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Review made successfully !"));
-        return review1;
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Review made successfully !"));
+//        return review1;
+    }
+
+    @CrossOrigin
+    @GetMapping("/all/{handymanid}")
+    public List<Review> getAllReviewsByHandyman(@PathVariable Long handymanid){
+        Optional<User> handyman = userRepo.findById(handymanid);
+        if (!handyman.isPresent()){
+            throw new NotFoundException("Handyman not found - id:" + handymanid);
+        }
+
+        List<Review> reviews = reviewRepo.findAllByHandyman(handyman.get());
+        return reviews;
     }
 }
