@@ -164,7 +164,6 @@ public class ProblemController {
         if (problemOpt.isPresent()){
             problem = problemOpt.get();
             User u = problem.getCustomer();
-            u.setPassword("");
             problem.setCustomer(u);
         }
         else {
