@@ -71,7 +71,7 @@ public class OfferController {
     }
 
     @CrossOrigin
-    @PreAuthorize("hasRole('HANDYMAN') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @GetMapping(value = "/problem/{problemid}")
     public List<Offer> getOffersByProblem(@PathVariable long problemid){
         Optional<Problem> problemOpt = problemRepo.findById(problemid);

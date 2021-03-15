@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +42,9 @@ public class ProblemController {
 
     @Autowired
     ProblemRepository problemRepo;
+
+    @Autowired
+    OfferRepository offerRepo;
 
     @Autowired
     CategoryRepository categoryRepo;
@@ -114,16 +118,13 @@ public class ProblemController {
     @CrossOrigin
     @GetMapping(value = "/{id}")
     public Problem getProblem(@PathVariable Long id){
-        Optional<Problem> problem = problemRepo.findById(id);
-
-
-        if (problem.isPresent()){
-            Problem videoReal = problem.get();
-            Problem updateViews = problem.get();
-            User u = videoReal.getCustomer();
+        Optional<Problem> problemOpt = problemRepo.findById(id);
+        if (problemOpt.isPresent()){
+            Problem problem = problemOpt.get();
+            User u = problem.getCustomer();
             u.setPassword("");
-            videoReal.setCustomer(u);
-            return videoReal;
+            problem.setCustomer(u);
+            return problem;
         }
         else {
             throw new NotFoundException("problem not found" + id);
@@ -152,5 +153,34 @@ public class ProblemController {
         long userID = userDetails.getId();
         Optional<User> customer = userRepo.findById(userID);
         return problemRepo.findAllByCustomer(customer.get());
+    }
+
+    @CrossOrigin
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
+    @PutMapping(value = "/complete/{problemid}")
+    public ResponseEntity<?> completeProblem(@PathVariable long problemid){
+        Optional<Problem> problemOpt = problemRepo.findById(problemid);
+        Problem problem;
+        if (problemOpt.isPresent()){
+            problem = problemOpt.get();
+            User u = problem.getCustomer();
+            u.setPassword("");
+            problem.setCustomer(u);
+        }
+        else {
+            throw new NotFoundException("problem not found" + problemid);
+        }
+
+        List<Offer> offerList = offerRepo.findAllByProblem(problem);
+        for (Offer o: offerList) {
+            if (o.getStatus().equals(EStatus.STATUS_UNDEFINED)){
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new MessageResponse("You must accept an offer to complete problem !"));
+            }
+        }
+        problem.setStatus(EStatus.STATUS_DONE);
+        problem.setFixed_at(LocalDateTime.now().toString());
+        problemRepo.save(problem);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Problem completed succesfully!"));
     }
 }

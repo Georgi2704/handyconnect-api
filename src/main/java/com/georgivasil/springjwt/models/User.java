@@ -39,7 +39,6 @@ public class User {
 
 	private String profilePic;
 
-	@NotBlank
 	@Size(max = 120)
 	private String password;
 
