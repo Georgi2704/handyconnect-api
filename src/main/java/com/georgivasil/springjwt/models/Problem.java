@@ -49,6 +49,10 @@ public class Problem {
                 inverseJoinColumns = @JoinColumn(name = "media_id"))
         private List<Media> media = new ArrayList<>();
 
+        @ManyToOne
+        @Valid
+        private Media finalResult;
+
         private EStatus status;
 
         private String posted_at;
@@ -147,6 +151,14 @@ public class Problem {
 
     public void setFixed_at(String fixed_at) {
         this.fixed_at = fixed_at;
+    }
+
+    public Media getFinalResult() {
+        return finalResult;
+    }
+
+    public void setFinalResult(Media finalResult) {
+        this.finalResult = finalResult;
     }
 
     @Override
