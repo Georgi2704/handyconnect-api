@@ -7,7 +7,7 @@ public class JwtResponse {
 	private String type = "Bearer";
 	private Long id;
 	private String firstName;
-	private String lastname;
+	private String lastName;
 	private String username;
 	private String email;
 	private List<String> roles;
@@ -21,7 +21,7 @@ public class JwtResponse {
 		this.roles = roles;
 		this.profilePic = profilePic;
 		this.firstName = firstName;
-		this.lastname = lastName;
+		this.lastName = lastName;
 	}
 
 	public String getAccessToken() {
@@ -74,5 +74,29 @@ public class JwtResponse {
 
 	public void setProfilePic(String profilePic) {
 		this.profilePic = profilePic;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 }
